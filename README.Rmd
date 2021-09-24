@@ -27,7 +27,7 @@ write.csv(new_bridges, file = "new_bridges.csv")
 ## Data Descriptions:
   ## bridge_ID: ID given to each bridge. 
   ## year: Year the structure was built (xxxx).
-  ## fips_codes: 
+  ## fips_codes: Code ID given to each state.
   ## conditions_rating: S meaning Structurally Deficient , F meaning Functionally Obsolete 
   ## lanes_on_structure: Number of lanes on the structure. 
   ## bridge_roadway_width: Width (meters) of bridge from curb to curb (xxx.x).
