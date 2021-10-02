@@ -1,0 +1,19 @@
+---
+title: "Stat433 HW Week4"
+author: "Georgia Warren"
+date: "10/2/2021"
+output: github_document
+---
+
+```{r}
+
+library(nycflights13)
+library(dplyr)
+
+flights %>% 
+  arrange(dep_delay)
+  
+
+
+```
+
