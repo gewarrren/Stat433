@@ -13,7 +13,7 @@ times are the longest are typically in the evening hours. The longer
 delay times for flights at such hours can depend on a number of factors,
 but some patterns that arise a
 
-## Pattern 1
+## Pattern 1: Origin
 
 ``` r
 library(nycflights13)
@@ -34,35 +34,7 @@ library(dplyr)
 ``` r
 library(ggplot2)
 
-# Viewing which hours of the day (time of day) have the largest average delays
-
-by_dest = flights %>% 
-  group_by(hour, dest) %>% 
-  summarise(mean_dep_delay = mean(dep_delay, na.rm = TRUE),
-            mean_arr_delay = mean(arr_delay, na.rm = TRUE)) %>% 
-  ggplot(aes(x = hour)) +
-           geom_point(aes(y=(mean_dep_delay)), alpha =0.35) + 
-           geom_point(aes(y=(mean_arr_delay)), alpha =0.35) +
-           xlab('hour') +
-           ylab('mean delay (minutes)')
-```
-
-    ## `summarise()` has grouped output by 'hour'. You can override using the `.groups` argument.
-
-``` r
-by_dest
-```
-
-    ## Warning: Removed 1 rows containing missing values (geom_point).
-    
-    ## Warning: Removed 1 rows containing missing values (geom_point).
-
-![](README_files/figure-gfm/Pattern%201%20Destination-1.png)<!-- -->
-
-## Pattern 2
-
-``` r
-# Looking at delay of flights by time of year (month)
+# Looking at mean delay of flights according to origin by the hour (time of day)
 
 by_origin = flights %>% 
   group_by(hour, origin) %>% 
@@ -70,10 +42,11 @@ by_origin = flights %>%
             mean_dep_delay = mean(dep_delay, na.rm = TRUE),
             mean_arr_delay = mean(arr_delay, na.rm = TRUE)) %>% 
   ggplot(aes(x = hour)) +
-           geom_point(aes(y=(mean_dep_delay)), alpha =0.35) + 
-           geom_point(aes(y=(mean_arr_delay)), alpha =0.35) +
+           geom_point(aes(y=(mean_dep_delay), color= "mean depature delay"), alpha =0.35)  + 
+           geom_point(aes(y=(mean_arr_delay),  color="mean arrival delay"), alpha =0.35) +
            xlab('hour') +
-           ylab('mean delay (minutes)')
+           ylab('mean delay (minutes)') + 
+          facet_wrap(~origin)
 ```
 
     ## `summarise()` has grouped output by 'hour'. You can override using the `.groups` argument.
@@ -86,20 +59,23 @@ by_origin
     
     ## Warning: Removed 1 rows containing missing values (geom_point).
 
-![](README_files/figure-gfm/Pattern%202%20Origin-1.png)<!-- -->
+![](README_files/figure-gfm/Pattern%201:%20Origin-1.png)<!-- -->
+
+## Pattern 2: Month
 
 ``` r
-# Looking at delay times according to destination by the hour (time of day)
+# Looking at mean delay times according to month by the hour (time of day)
 
 by_month = flights %>% 
   group_by(hour, month) %>% 
   summarise(mean_dep_delay = mean(dep_delay, na.rm = TRUE),
             mean_arr_delay = mean(arr_delay, na.rm = TRUE)) %>% 
   ggplot(aes(x = hour)) +
-           geom_point(aes(y=(mean_dep_delay)), alpha =0.35) + 
-           geom_point(aes(y=(mean_arr_delay)), alpha =0.35) +
+           geom_point(aes(y=(mean_dep_delay), color= "mean depature delay"), alpha =0.35)  + 
+           geom_point(aes(y=(mean_arr_delay),  color="mean arrival delay"), alpha =0.35) +
            xlab('hour') +
-           ylab('mean delay (minutes)')
+           ylab('mean delay (minutes)') + 
+          facet_wrap(~month)
 ```
 
     ## `summarise()` has grouped output by 'hour'. You can override using the `.groups` argument.
@@ -112,4 +88,31 @@ by_month
     
     ## Warning: Removed 1 rows containing missing values (geom_point).
 
-![](README_files/figure-gfm/Pattern%203-1.png)<!-- -->
+![](README_files/figure-gfm/Pattern%202:%20Month-1.png)<!-- -->
+
+## Pattern 3: Airline Carrier
+
+``` r
+# Looking at the mean delay times according to carrier by the hour (time of day)
+
+
+by_carrier = flights %>% 
+  filter(!(arr_delay > 120)) %>% 
+  group_by(hour, carrier) %>% 
+  summarise(mean_dep_delay = mean(dep_delay, na.rm = TRUE),
+            mean_arr_delay = mean(arr_delay, na.rm = TRUE)) %>% 
+  ggplot(aes(x = hour)) +
+           geom_point(aes(y=(mean_dep_delay), color= "mean depature delay"), alpha =0.35)  + 
+           geom_point(aes(y=(mean_arr_delay),  color="mean arrival delay"), alpha =0.35) +
+           xlab('hour') +
+           ylab('mean delay (minutes)') +
+           facet_wrap(~carrier)
+```
+
+    ## `summarise()` has grouped output by 'hour'. You can override using the `.groups` argument.
+
+``` r
+by_carrier
+```
+
+![](README_files/figure-gfm/Pattern%203:%20Airline%20Carrier-1.png)<!-- -->
